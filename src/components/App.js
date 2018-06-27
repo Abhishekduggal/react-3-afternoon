@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import Post from './Post/Post'
-import './App.css';
+import React, { Component } from "react";
+import axios from "axios";
+import Post from "./Post/Post";
+import "./App.css";
 
-import Header from './Header/Header';
-import Compose from './Compose/Compose';
+import Header from "./Header/Header";
+import Compose from "./Compose/Compose";
 
 class App extends Component {
   constructor() {
@@ -20,43 +20,49 @@ class App extends Component {
   }
 
   componentDidMount() {
-    axios.get('https://practiceapi.devmountain.com/api/posts').then(res => {
+    axios.get("https://practiceapi.devmountain.com/api/posts").then(res => {
       //console.log(res);
-      this.setState({ posts: res.data })
-    })
+      this.setState({ posts: res.data });
+    });
   }
 
   updatePost(id, text) {
-    axios.put(`https://practiceapi.devmountain.com/api/posts?id=${id}`, { text }).then(results => {
-      this.setState({ post: results.data })
-    });
-    //console.log(id);
+    axios
+      .put(`https://practiceapi.devmountain.com/api/posts?id=${id}`, { text })
+      .then(results => {
+        console.log(results);
+        this.setState({ posts: results.data });
+      });
+    //console.log(this.state.post);
   }
 
   deletePost(id) {
-    axios.delete(`https://practiceapi.devmountain.com/api/posts?id=${id}`).then(results => {
-      this.setState({ posts: results.data });
-    });
+    axios
+      .delete(`https://practiceapi.devmountain.com/api/posts?id=${id}`)
+      .then(results => {
+        this.setState({ posts: results.data });
+      });
   }
 
   createPost(text) {
     //console.log('Its working')
-    axios.post('https://practiceapi.devmountain.com/api/posts', { text }).then(results => {
-      this.setState({ posts: results.data });
-    });
+    axios
+      .post("https://practiceapi.devmountain.com/api/posts", { text })
+      .then(results => {
+        this.setState({ posts: results.data });
+      });
   }
 
   render() {
-    const { posts } = this.state;
+    //const { posts } = this.state;
     //console.log(posts);
     return (
       <div className="App__parent">
         <Header />
 
         <section className="App__content">
-
           <Compose createPostFn={this.createPost} />
-          {posts.map(post => {
+          {this.state.posts.map(post => {
             //console.log(post)
             return (
               <Post
@@ -67,9 +73,8 @@ class App extends Component {
                 id={post.id}
                 deletePostFn={this.deletePost}
               />
-            )
+            );
           })}
-
         </section>
       </div>
     );
